@@ -26,19 +26,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ onLoginSuccess }) => {
       localStorage.setItem('veoma_user', JSON.stringify(res.user));
       onLoginSuccess(res.user, res.access_token);
     } catch (err: any) {
-      if (!err.response || err.response.status === 404 || err.response.status === 405) {
-        if (isGitHubPages) {
-          setError(
-            'Backend is offline on GitHub Pages: GitHub Pages only hosts static files and cannot execute the Python FastAPI server. To use the full system with live database, please open http://localhost:8000 on your PC.'
-          );
-        } else {
-          setError(
-            'Cannot connect to backend server. Please ensure FastAPI is running on http://localhost:8000.'
-          );
-        }
-      } else {
-        setError(err.response?.data?.detail || 'Invalid username or password');
-      }
+      setError(err.response?.data?.detail || err.message || 'Invalid username or password');
     } finally {
       setLoading(false);
     }
